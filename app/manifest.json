@@ -1,7 +1,7 @@
 {
     "name": "Link Vault",
     "short_name": "Vault",
-    "start_url": "index.html",
+    "start_url": "../index.html",
     "display": "standalone",
     "background_color": "#111111",
     "theme_color": "#111111",
