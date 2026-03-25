@@ -1,0 +1,232 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, Arial, sans-serif;
+}
+
+body {
+    background: #f4f6f9;
+    color: #222;
+}
+
+/* PAGES */
+.page {
+    display: none;
+    padding: 15px;
+}
+
+.activePage {
+    display: block;
+}
+
+/* CENTER BOX */
+.centerBox {
+    width: 90%;
+    max-width: 400px;
+    margin: 100px auto;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.centerBox input,
+.centerBox select,
+.centerBox button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* FORM BOX */
+.formBox {
+    width: 90%;
+    max-width: 500px;
+    margin: 40px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid #ddd;
+}
+
+.navbar input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.navbar button {
+    padding: 10px;
+}
+
+/* TABS */
+.tabs {
+    display: flex;
+    overflow-x: auto;
+    background: #e9ecef;
+}
+
+.tabs button {
+    padding: 12px;
+    border: none;
+    background: transparent;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.tabs button:hover {
+    background: #dfe3e8;
+}
+
+/* TAB CONTENT */
+.tabContent {
+    padding: 10px;
+}
+
+.tabPage {
+    display: none;
+}
+
+.activeTab {
+    display: block;
+}
+
+/* CARDS */
+#cardsContainer,
+#instagramContainer,
+#favoritesContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.card img {
+    width: 100%;
+    border-radius: 8px;
+}
+
+.cardTitle {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 6px;
+}
+
+.cardURL {
+    font-size: 12px;
+    color: gray;
+    word-break: break-all;
+}
+
+.cardInfo {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 6px;
+}
+
+.cardButtons {
+    display: flex;
+    gap: 5px;
+    margin-top: 8px;
+}
+
+.cardButtons button {
+    flex: 1;
+    padding: 7px;
+    font-size: 12px;
+}
+
+/* POPUP */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popupBox {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.popupBox input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+}
+
+.popupBox button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+}
+
+/* BUTTON */
+button {
+    border: none;
+    background: #2d89ff;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* RESPONSIVE */
+@media (min-width: 600px) {
+
+    #cardsContainer,
+    #instagramContainer,
+    #favoritesContainer {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (min-width: 900px) {
+
+    #cardsContainer,
+    #instagramContainer,
+    #favoritesContainer {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}

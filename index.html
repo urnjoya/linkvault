@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>LinkVault - Offline Secure Link Manager</title>
+
+    <meta name="description"
+        content="LinkVault is an offline secure link manager to save, organize, and manage links with password protection, tags, favorites, and reminders. Works offline as a PWA.">
+
+    <meta name="keywords"
+        content="link manager, bookmark manager, offline bookmark app, link vault, save links offline, pwa link manager, bookmark organizer">
+
+    <meta name="author" content="urnjoya">
+    <meta name="robots" content="index, follow">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <!-- PWA -->
+    <meta name="theme-color" content="#2d89ff">
+    <link rel="manifest" href="/app/manifest.json">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="LinkVault – Offline Secure Link Manager">
+    <meta property="og:description"
+        content="Save and organize your links securely with password protection, tags, favorites and offline support.">
+    <meta property="og:image" content="/assets/preview.png">
+    <meta property="og:url" content="https://yourdomain.com">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="LinkVault – Offline Link Manager">
+    <meta name="twitter:description" content="Secure offline bookmark manager with tags, favorites and reminders.">
+    <meta name="twitter:image" content="/assets/preview.png">
+    <!-- PRELOAD -->
+    <link rel="preload" href="/css/style.css" as="style">
+    <link rel="preload" href="/css/dark.css" as="style">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dark.css">
+</head>
+
+<body>
+
+    <!-- LOCK SCREEN -->
+    <section id="lockScreen" class="page">
+        <div class="centerBox">
+            <h2>Enter Password</h2>
+            <input type="password" id="lockPassword">
+            <button onclick="unlockApp()">Unlock</button>
+        </div>
+    </section>
+
+    <!-- LOGIN / CREATE ACCOUNT -->
+    <section id="loginPage" class="page">
+        <div class="centerBox">
+            <h2>Welcome to Link Vault</h2>
+            <button onclick="showCreateAccount()">Create Account</button>
+            <button onclick="showRecovery()">Recover Account</button>
+        </div>
+    </section>
+
+    <!-- CREATE ACCOUNT -->
+    <section id="createAccountPage" class="page">
+        <div class="formBox">
+            <h2>Create Account</h2>
+
+            <input type="text" id="name" placeholder="Name">
+            <select id="gender">
+                <option>Male</option>
+                <option>Female</option>
+            </select>
+
+            <input type="password" id="password" placeholder="Password">
+
+            <select id="securityQuestion">
+                <option>Pet name?</option>
+                <option>Favorite color?</option>
+                <option>Birth city?</option>
+            </select>
+
+            <input type="text" id="securityAnswer" placeholder="Answer">
+
+            <button onclick="createAccount()">Create</button>
+            <button onclick="goToLogin()">Back</button>
+        </div>
+    </section>
+
+    <!-- DASHBOARD -->
+    <section id="dashboardPage" class="page">
+
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <input type="text" id="searchBar" placeholder="Search links..." onkeyup="searchLinks()">
+
+            <button onclick="showAddPopup()">Add</button>
+            <button onclick="sortMenu()">Sort</button>
+            <button onclick="toggleTheme()">Dark</button>
+            <button onclick="lockApp()">Lock</button>
+        </nav>
+
+        <!-- TABS -->
+        <div class="tabs">
+            <button onclick="showTab('linksTab')">Links</button>
+            <button onclick="showTab('instagramTab')">Instagram</button>
+            <button onclick="showTab('favoritesTab')">Favorites</button>
+            <button onclick="showTab('categoriesTab')">Categories</button>
+            <button onclick="showTab('tagsTab')">Tags</button>
+            <button onclick="showTab('historyTab')">History</button>
+            <button onclick="showTab('profileTab')">Profile</button>
+            <button onclick="exportAllData()">Export Data</button>
+            <button onclick="importFromInput()">Import Data</button>
+            <button onclick="showTab('settingsTab')">Settings</button>
+        </div>
+
+        <!-- TAB CONTENT -->
+        <div class="tabContent">
+
+            <div id="linksTab" class="tabPage">
+                <div id="cardsContainer"></div>
+            </div>
+
+            <div id="instagramTab" class="tabPage">
+                <div id="instagramContainer"></div>
+            </div>
+
+            <div id="favoritesTab" class="tabPage">
+                <div id="favoritesContainer"></div>
+            </div>
+
+            <div id="categoriesTab" class="tabPage">
+                <div id="categoriesContainer"></div>
+            </div>
+
+            <div id="tagsTab" class="tabPage">
+                <div id="tagsContainer"></div>
+            </div>
+
+            <div id="historyTab" class="tabPage">
+                <canvas id="visitGraph" width="300" height="150"></canvas>
+            </div>
+
+            <div id="profileTab" class="tabPage">
+                <h3>Profile</h3>
+                <div id="profileData"></div>
+            </div>
+
+            <div id="exportTab" class="tabPage">
+                <button onclick="exportData()">Export Data</button>
+            </div>
+
+            <div id="importTab" class="tabPage">
+                <input type="file" id="importFile">
+                <button onclick="importData()">Import Data</button>
+            </div>
+
+            <div id="settingsTab" class="tabPage">
+                <h3>Settings</h3>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ADD LINK POPUP -->
+    <div id="addPopup" class="popup">
+        <div class="popupBox">
+            <h3>Add Link</h3>
+
+            <input type="text" id="linkURL" placeholder="URL (required)">
+            <input type="text" id="linkTitle" placeholder="Title">
+            <input type="text" id="linkImage" placeholder="Image URL">
+            <input type="text" id="linkCategory" placeholder="Category">
+            <input type="text" id="linkTags" placeholder="Tags comma separated">
+
+            <button onclick="addLink()">Save</button>
+            <button onclick="closeAddPopup()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="/js/core.js"></script>
+    <script src="/js/links.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/organize.js"></script>
+    <script src="/js/tools.js"></script>
+    <script src="/js/backup.js"></script>
+    <script src="/js/analytics.js"></script>
+    <script src="/js/pwa.js"></script>
+    <script src="/js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/app/service-worker.js')
+                .then(() => console.log("Service Worker Registered"));
+        }
+    </script>
+
+</body>
+
+</html>
