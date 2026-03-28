@@ -166,6 +166,9 @@ function dbGetUser() {
 openDB();
 
 // auth.js
+function getCurrentUser() {
+    return JSON.parse(localStorage.getItem("currentUser"));
+}
 // CREATE ACCOUNT
 function createAccount() {
     let name = document.getElementById("name").value;
