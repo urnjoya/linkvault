@@ -59,16 +59,16 @@ function createCard(link) {
         </div>
 
         <div class="cardButtons">
-            <button onclick="openLink(${link.id})">Open</button>
-            <button onclick="toggleFavorite(${link.id})">Fav</button>
-            <button onclick="togglePin(${link.id})">Pin</button>
-            <button onclick="editLink(${link.id})">Edit</button>
-            <button onclick="deleteLink(${link.id})">Del</button>
+            <button class="btn btn-primary" onclick="openLink(${link.id})">Open</button>
+            <button class="btn btn-ghost" onclick="toggleFavorite(${link.id})">Fav</button>
+            <button class="btn btn-ghost" onclick="togglePin(${link.id})">Pin</button>
+            <button class="btn btn-secondary" onclick="editLink(${link.id})">Edit</button>
+            <button class="btn btn-danger" onclick="deleteLink(${link.id})">Del</button>
         </div>
 
         <div class="cardButtons">
-            <button onclick="refetchMetadata(${link.id})">Refetch</button>
-            <button onclick="showMoreInfo(${link.id})">Info</button>
+            <button class="btn btn-warning" onclick="refetchMetadata(${link.id})">Refetch</button>
+            <button class="btn btn-secondary" onclick="showMoreInfo(${link.id})">Info</button>
         </div>
     `;
 
@@ -168,9 +168,11 @@ async function sortByManualOrder() {
 function setTheme(theme) {
     if (theme === "dark") {
         document.body.classList.add("dark");
+        // document.body.classList.toggle("dark");
         localStorage.setItem("theme", "dark");
     } else {
         document.body.classList.remove("dark");
+        // document.body.classList.toggle("dark");
         localStorage.setItem("theme", "light");
     }
 }
@@ -193,4 +195,20 @@ function loadTheme() {
     if (!theme) theme = "light";
 
     setTheme(theme);
+}
+// noti
+function showNotification(type, message) {
+    let container = document.getElementById("notificationContainer");
+
+    let notif = document.createElement("div");
+    notif.className = "notification " + type;
+    notif.innerText = message;
+
+    container.appendChild(notif);
+
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        notif.classList.add("hide");
+        setTimeout(() => notif.remove(), 300);
+    }, 3000);
 }
