@@ -12,8 +12,10 @@ function startApp() {
     } else {
         showPage("lockScreen");
     }
-
-    showTab("linksTab");
+    // Default tab
+    let firstTabBtn = document.querySelector(".tabs button");
+    showTab("linksTab", firstTabBtn);
+    // showTab("linksTab");
 
     loadTheme();
     handleSharedData();
@@ -21,21 +23,29 @@ function startApp() {
     startDeadLinkScheduler();
     loadProfile();
 }
-
+// 
+// 
 // PAGE SWITCHING
 function showPage(pageId) {
     let pages = document.querySelectorAll(".page");
     pages.forEach(page => page.classList.remove("activePage"));
-
     document.getElementById(pageId).classList.add("activePage");
 }
 
 // TAB SWITCHING
-function showTab(tabId) {
+function showTab(tabId, el) {
     let tabs = document.querySelectorAll(".tabPage");
     tabs.forEach(tab => tab.classList.remove("activeTab"));
 
     document.getElementById(tabId).classList.add("activeTab");
+
+    // Active tab button
+    let btns = document.querySelectorAll(".tabs button");
+    btns.forEach(btn => btn.classList.remove("activeTabBtn"));
+
+    if (el) {
+        el.classList.add("activeTabBtn");
+    }
 }
 
 // LOGIN NAVIGATION
@@ -46,6 +56,8 @@ function showCreateAccount() {
 function showRecovery() {
     showPage("importTab");
     showPage("dashboardPage");
+    const nav = document.querySelector('nav');
+    // nav.style.display = "none";
 }
 
 function goToLogin() {
@@ -54,7 +66,14 @@ function goToLogin() {
 
 // LOCK SYSTEM
 function lockApp() {
-    showPage("lockScreen");
+    // localStorage.removeItem("currentUser"); // ✅ important
+    if (!getCurrentUser()) {
+        showNotification("error", "Login Required!");
+        return;
+    }
+    else {
+        showPage("lockScreen");
+    }
 }
 
 function unlockApp() {
@@ -64,16 +83,26 @@ function unlockApp() {
     if (!user) return;
 
     if (inputPass === user.password) {
+
+        // ✅ SET current user
+        localStorage.setItem("currentUser", JSON.stringify(user));
+
         showPage("dashboardPage");
         loadAllCards();
     } else {
-        alert("Wrong Password");
+        showNotification("error", "Wrong Password!");
     }
 }
 
 // POPUP CONTROL
 function showAddPopup() {
-    document.getElementById("addPopup").style.display = "flex";
+    if (!getCurrentUser()) {
+        showNotification("error", "Login Required!");
+        return;
+    }
+    else {
+        document.getElementById("addPopup").style.display = "flex";
+    }
 }
 
 function closeAddPopup() {
@@ -82,7 +111,7 @@ function closeAddPopup() {
 
 // SORT MENU (placeholder)
 function sortMenu() {
-    alert("Sort options coming here");
+    showNotification("info", "Sort options coming soon");
 }
 
 // DARK MODE TOGGLE
