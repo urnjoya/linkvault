@@ -1,46 +1,47 @@
-body.dark {
+body.darkMode {
     background: #121212;
     color: #e0e0e0;
 }
 
 /* BOXES */
-body.dark .centerBox,
-body.dark .formBox,
-body.dark .popupBox,
-body.dark .card,
-body.dark .navbar {
+body.darkMode .centerBox,
+body.darkMode .formBox,
+body.darkMode .popupBox,
+body.darkMode .card,
+body.darkMode .navbar,
+body.darkMode .tabs {
     background: #1e1e1e;
     color: #e0e0e0;
 }
 
-/* INPUTS */
-body.dark input,
-body.dark select {
+/* INPUT */
+body.darkMode input,
+body.darkMode select {
     background: #2a2a2a;
     color: #e0e0e0;
     border: 1px solid #444;
 }
 
-/* TABS */
-body.dark .tabs {
-    background: #1a1a1a;
+/* BUTTONS */
+body.darkMode .btn-secondary {
+    background: #333;
+    color: white;
 }
 
-body.dark .tabs button:hover {
+body.darkMode .tabs button:hover {
     background: #333;
 }
 
-/* CARD URL */
-body.dark .cardURL {
-    color: #aaa;
-}
-
-/* BUTTON */
-body.dark button {
+body.darkMode .tabs button.activeTabBtn {
     background: #3a7cff;
 }
 
-/* NAVBAR BORDER */
-body.dark .navbar {
+/* CARD */
+body.darkMode .card {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+/* NAVBAR */
+body.darkMode .navbar {
     border-bottom: 1px solid #333;
 }
