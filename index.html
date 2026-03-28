@@ -20,31 +20,31 @@
 
     <!-- PWA -->
     <meta name="theme-color" content="#2d89ff">
-    <link rel="manifest" href="app/manifest.json">
+    <link rel="manifest" href="/app/manifest.json">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="LinkVault – Offline Secure Link Manager">
     <meta property="og:description"
         content="Save and organize your links securely with password protection, tags, favorites and offline support.">
-    <meta property="og:image" content="assets/preview.png">
-    <!-- <meta property="og:url" content="https://yourdomain.com"> -->
+    <meta property="og:image" content="/assets/preview.png">
+    <meta property="og:url" content="https://yourdomain.com">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LinkVault – Offline Link Manager">
     <meta name="twitter:description" content="Secure offline bookmark manager with tags, favorites and reminders.">
-    <meta name="twitter:image" content="assets/preview.png">
+    <meta name="twitter:image" content="/assets/preview.png">
     <!-- PRELOAD -->
-    <link rel="preload" href="css/style.css" as="style">
-    <link rel="preload" href="css/dark.css" as="style">
+    <link rel="preload" href="/css/style.css" as="style">
+    <link rel="preload" href="/css/dark.css" as="style">
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/dark.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dark.css">
 </head>
 
 <body>
@@ -54,7 +54,7 @@
         <div class="centerBox">
             <h2>Enter Password</h2>
             <input type="password" id="lockPassword">
-            <button onclick="unlockApp()">Unlock</button>
+            <button class="btn btn-primary" onclick="unlockApp()">Unlock</button>
         </div>
     </section>
 
@@ -62,8 +62,8 @@
     <section id="loginPage" class="page">
         <div class="centerBox">
             <h2>Welcome to Link Vault</h2>
-            <button onclick="showCreateAccount()">Create Account</button>
-            <button onclick="showRecovery()">Recover Account</button>
+            <button class="btn btn-primary" onclick="showCreateAccount()">Create Account</button>
+            <button class="btn btn-secondary" onclick="showRecovery()">Recover Account</button>
         </div>
     </section>
 
@@ -71,25 +71,25 @@
     <section id="createAccountPage" class="page">
         <div class="formBox">
             <h2>Create Account</h2>
-
-            <input type="text" id="name" placeholder="Name">
+            <hr>
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="asmith">
+            <label for="gender">Gender</label><br>
             <select id="gender">
                 <option>Male</option>
                 <option>Female</option>
             </select>
-
-            <input type="password" id="password" placeholder="Password">
-
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="algpt@7845">
+            <label for="securityQuestion">Security Questions</label>
             <select id="securityQuestion">
                 <option>Pet name?</option>
                 <option>Favorite color?</option>
                 <option>Birth city?</option>
             </select>
-
             <input type="text" id="securityAnswer" placeholder="Answer">
-
-            <button onclick="createAccount()">Create</button>
-            <button onclick="goToLogin()">Back</button>
+            <button class="btn btn-success" onclick="createAccount()">Create</button>
+            <button class="btn btn-secondary" onclick="goToLogin()">Back</button>
         </div>
     </section>
 
@@ -98,26 +98,34 @@
 
         <!-- NAVBAR -->
         <nav class="navbar">
-            <input type="text" id="searchBar" placeholder="Search links..." onkeyup="searchLinks()">
+            <div class="navLeft">
+                <h3><a href="/"> LinkVault </a></h3>
+            </div>
 
-            <button onclick="showAddPopup()">Add</button>
-            <button onclick="sortMenu()">Sort</button>
-            <button onclick="toggleTheme()">Dark</button>
-            <button onclick="lockApp()">Lock</button>
+            <div class="navCenter">
+                <input type="text" id="searchBar" placeholder="Search links..." onkeyup="searchLinks()">
+            </div>
+
+            <div class="navRight">
+                <button class="btn btn-primary" onclick="showAddPopup()">Add</button>
+                <button class="btn btn-ghost" onclick="toggleDarkMode()">Dark</button>
+                <button class="btn btn-danger" onclick="lockApp()">Lock</button>
+            </div>
         </nav>
+
 
         <!-- TABS -->
         <div class="tabs">
-            <button onclick="showTab('linksTab')">Links</button>
-            <button onclick="showTab('instagramTab')">Instagram</button>
-            <button onclick="showTab('favoritesTab')">Favorites</button>
-            <button onclick="showTab('categoriesTab')">Categories</button>
-            <button onclick="showTab('tagsTab')">Tags</button>
-            <button onclick="showTab('historyTab')">History</button>
-            <button onclick="showTab('profileTab')">Profile</button>
-            <button onclick="exportAllData()">Export Data</button>
-            <button onclick="importFromInput()">Import Data</button>
-            <button onclick="showTab('settingsTab')">Settings</button>
+            <button class="activeTabBtn btn btn-tab" onclick="showTab('linksTab', this)">Links</button>
+            <button class="btn btn-tab" onclick="showTab('instagramTab', this)">Instagram</button>
+            <button class="btn btn-tab" onclick="showTab('favoritesTab', this)">Favorites</button>
+            <button class="btn btn-tab" onclick="showTab('categoriesTab', this)">Categories</button>
+            <button class="btn btn-tab" onclick="showTab('tagsTab', this)">Tags</button>
+            <button class="btn btn-tab" onclick="showTab('historyTab', this)">History</button>
+            <button class="btn btn-tab" onclick="showTab('profileTab', this)">Profile</button>
+            <button class="btn btn-tab btn-warning" onclick="exportAllData()">Export Data</button>
+            <button class="btn btn-tab btn-warning" onclick="importFromInput()">Import Data</button>
+            <button class="btn btn-tab" onclick="showTab('settingsTab', this)">Settings</button>
         </div>
 
         <!-- TAB CONTENT -->
@@ -179,28 +187,26 @@
             <input type="text" id="linkCategory" placeholder="Category">
             <input type="text" id="linkTags" placeholder="Tags comma separated">
 
-            <button onclick="addLink()">Save</button>
-            <button onclick="closeAddPopup()">Cancel</button>
+            <button class="btn btn-success" onclick="addLink()">Save</button>
+            <button class="btn btn-secondary" onclick="closeAddPopup()">Cancel</button>
         </div>
     </div>
-
+    <div id="notificationContainer"></div>
     <!-- SCRIPTS -->
-    <script src="js/core.js"></script>
-    <script src="js/links.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/organize.js"></script>
-    <script src="js/tools.js"></script>
-    <script src="js/backup.js"></script>
-    <script src="js/analytics.js"></script>
-    <script src="js/pwa.js"></script>
-    <script src="js/app.js"></script>
+    <script src="/js/core.js"></script>
+    <script src="/js/links.js"></script>
+    <script src="/js/ui.js"></script>
+    <script src="/js/organize.js"></script>
+    <script src="/js/tools.js"></script>
+    <script src="/js/backup.js"></script>
+    <script src="/js/analytics.js"></script>
+    <script src="/js/pwa.js"></script>
+    <script src="/js/app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/app/service-worker.js')
                 .then(() => console.log("Service Worker Registered"));
         }
     </script>
-
 </body>
-
 </html>
