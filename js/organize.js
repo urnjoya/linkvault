@@ -224,30 +224,37 @@ async function unpinAllLinks() {
 // search.js
 // SEARCH LINKS
 async function searchLinks() {
-    let query = document.getElementById("searchBar").value.toLowerCase();
-
-    let links = await dbGetAllLinks();
-
-    if (!query) {
-        renderCards(links);
+    if (!getCurrentUser()) {
+        // showNotification("error", "Login Required!");
+        document.getElementById("searchBar").disabled = true;
         return;
     }
+    else {
+        let query = document.getElementById("searchBar").value.toLowerCase();
 
-    let filtered = links.filter(link => {
-        let title = link.title.toLowerCase();
-        let url = link.url.toLowerCase();
-        let category = link.category.toLowerCase();
-        let tags = link.tags.join(",").toLowerCase();
+        let links = await dbGetAllLinks();
 
-        return (
-            title.includes(query) ||
-            url.includes(query) ||
-            category.includes(query) ||
-            tags.includes(query)
-        );
-    });
+        if (!query) {
+            renderCards(links);
+            return;
+        }
 
-    renderCards(filtered);
+        let filtered = links.filter(link => {
+            let title = link.title.toLowerCase();
+            let url = link.url.toLowerCase();
+            let category = link.category.toLowerCase();
+            let tags = link.tags.join(",").toLowerCase();
+
+            return (
+                title.includes(query) ||
+                url.includes(query) ||
+                category.includes(query) ||
+                tags.includes(query)
+            );
+        });
+
+        renderCards(filtered);
+    }
 }
 
 // SEARCH BY CATEGORY
