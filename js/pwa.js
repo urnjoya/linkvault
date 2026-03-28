@@ -17,7 +17,8 @@ async function addSharedLink(url, title) {
     let duplicate = await isDuplicateUrl(url);
 
     if (duplicate) {
-        alert("Link already saved!");
+        // alert("Link already saved!");
+        showNotification("warning","Link already saved!")
         return;
     }
 
@@ -41,7 +42,8 @@ async function addSharedLink(url, title) {
     await dbAddLink(newLink);
     loadAllCards();
 
-    alert("Link saved from share!");
+    // alert("Link saved from share!");
+    showNotification("success","Link save from share.");
 }
 // instagram.js
 // CHECK INSTAGRAM URL
