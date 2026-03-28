@@ -18,7 +18,7 @@ async function addLink() {
             return;
         }
     }
-    
+
 
     // Fetch metadata if missing
     let meta = await fetchMetadata(url);
