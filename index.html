@@ -20,31 +20,30 @@
 
     <!-- PWA -->
     <meta name="theme-color" content="#2d89ff">
-    <link rel="manifest" href="/app/manifest.json">
+    <link rel="manifest" href="app/manifest.json">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
-    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="LinkVault – Offline Secure Link Manager">
     <meta property="og:description"
         content="Save and organize your links securely with password protection, tags, favorites and offline support.">
-    <meta property="og:image" content="/assets/preview.png">
-    <meta property="og:url" content="https://yourdomain.com">
+    <meta property="og:image" content="assets/preview.png">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="LinkVault – Offline Link Manager">
     <meta name="twitter:description" content="Secure offline bookmark manager with tags, favorites and reminders.">
-    <meta name="twitter:image" content="/assets/preview.png">
+    <meta name="twitter:image" content="assets/preview.png">
     <!-- PRELOAD -->
-    <link rel="preload" href="/css/style.css" as="style">
-    <link rel="preload" href="/css/dark.css" as="style">
+    <link rel="preload" href="css/style.css" as="style">
+    <link rel="preload" href="css/dark.css" as="style">
     <!-- CSS -->
-    <link rel="stylesheet" href="/css/style.css">
-    <link rel="stylesheet" href="/css/dark.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark.css">
 </head>
 
 <body>
@@ -99,7 +98,7 @@
         <!-- NAVBAR -->
         <nav class="navbar">
             <div class="navLeft">
-                <h3><a href="/"> LinkVault </a></h3>
+                <h3><a href=""> LinkVault </a></h3>
             </div>
 
             <div class="navCenter">
@@ -193,15 +192,15 @@
     </div>
     <div id="notificationContainer"></div>
     <!-- SCRIPTS -->
-    <script src="/js/core.js"></script>
-    <script src="/js/links.js"></script>
-    <script src="/js/ui.js"></script>
-    <script src="/js/organize.js"></script>
-    <script src="/js/tools.js"></script>
-    <script src="/js/backup.js"></script>
-    <script src="/js/analytics.js"></script>
-    <script src="/js/pwa.js"></script>
-    <script src="/js/app.js"></script>
+    <script src="js/core.js"></script>
+    <script src="js/links.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/organize.js"></script>
+    <script src="js/tools.js"></script>
+    <script src="js/backup.js"></script>
+    <script src="js/analytics.js"></script>
+    <script src="js/pwa.js"></script>
+    <script src="js/app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/app/service-worker.js')
