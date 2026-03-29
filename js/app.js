@@ -530,7 +530,7 @@ function toggleDarkMode() {
 // update
 async function checkForUpdates() {
     try {
-        let res = await fetch("/app/version.json?t=" + Date.now());
+        let res = await fetch("app/version.json?t=" + Date.now());
         let data = await res.json();
 
         let currentVersion = localStorage.getItem("appVersion");
