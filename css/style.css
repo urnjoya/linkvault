@@ -309,6 +309,85 @@ a {
     transition: 0.3s;
 }
 
+/* PROFILE CARD */
+.profileCard {
+    max-width: 420px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* HEADER */
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* AVATAR */
+.profileAvatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #2d89ff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* NAME */
+.profileName {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* META */
+.profileMeta {
+    font-size: 13px;
+    color: #777;
+}
+
+/* BODY */
+.profileBody {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* ITEM */
+.profileItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #f5f7fa;
+}
+
+/* LABEL */
+.profileItem .label {
+    color: #666;
+}
+
+/* VALUE */
+.profileItem .value {
+    font-weight: 500;
+}
+
+/* ACTIONS */
+.profileActions {
+    display: flex;
+    justify-content: flex-end;
+}
+
 /* Animation */
 @keyframes slideIn {
     from {
@@ -348,4 +427,15 @@ a {
 .container {
     max-width: 1200px;
     margin: auto;
+}
+
+@media (max-width: 500px) {
+    .profileCard {
+        margin: 10px;
+        padding: 16px;
+    }
+
+    .profileItem {
+        font-size: 13px;
+    }
 }
