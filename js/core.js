@@ -178,7 +178,7 @@ function createAccount() {
     let answer = document.getElementById("securityAnswer").value;
 
     if (!name || !password || !answer) {
-        alert("Fill all fields");
+        showNotification("error", "Fill all fields");
         return;
     }
 
@@ -193,7 +193,7 @@ function createAccount() {
 
     localStorage.setItem("user", JSON.stringify(user));
 
-    alert("Account Created");
+    showNotification("success", "Account Created! Please Login.");
     showPage("lockScreen");
 }
 
@@ -216,9 +216,9 @@ function resetPassword() {
         let newPass = prompt("Enter New Password");
         user.password = newPass;
         localStorage.setItem("user", JSON.stringify(user));
-        alert("Password Updated");
+        showNotification("success", "Password Updated");
     } else {
-        alert("Wrong Answer");
+        showNotification("error", "Wrong Answer");
     }
 }
 
@@ -230,11 +230,41 @@ function loadProfile() {
     let profileDiv = document.getElementById("profileData");
 
     profileDiv.innerHTML = `
-        <p>Name: ${user.name}</p>
-        <p>Gender: ${user.gender}</p>
-        <p>Account Created: ${user.createdDate}</p>
-        <button onclick="resetPassword()">Reset Password</button>
-    `;
+    <div class="profileCard">
+
+        <div class="profileHeader">
+            <div class="profileAvatar">
+                ${user.name.charAt(0).toUpperCase()}
+            </div>
+            <div>
+                <div class="profileName">${user.name}</div>
+                <div class="profileMeta">${user.gender}</div>
+            </div>
+        </div>
+
+        <div class="profileBody">
+            <div class="profileItem">
+                <span class="label">Name</span>
+                <span class="value">${user.name}</span>
+            </div>
+
+            <div class="profileItem">
+                <span class="label">Gender</span>
+                <span class="value">${user.gender}</span>
+            </div>
+
+            <div class="profileItem">
+                <span class="label">Created</span>
+                <span class="value">${formatDate(user.createdDate)}</span>
+            </div>
+        </div>
+
+        <div class="profileActions">
+            <button class="btn btn-warning" onclick="resetPassword()">Reset Password</button>
+        </div>
+
+    </div>
+`;
 }
 
 // EXPORT USER DATA (Used in export.js later)
@@ -291,11 +321,11 @@ async function changePassword(oldPass, newPass) {
     let valid = await verifyPassword(oldPass);
 
     if (!valid) {
-        alert("Wrong old password");
+        showNotification("error", "Wrong old password");
         return false;
     }
 
     await savePassword(newPass);
-    alert("Password changed");
+    showNotification("success", "Password changed");
     return true;
 }
