@@ -1,5 +1,4 @@
-const CACHE_NAME = "linkvault-cache-v1.1";
-
+const CACHE_NAME = "linkvault-cache-v1.0.0";
 const urlsToCache = [
     "../",
     "../index.html",
