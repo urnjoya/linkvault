@@ -1,20 +1,20 @@
 const CACHE_NAME = "linkvault-cache-v1.0.0";
 const urlsToCache = [
-    "../",
-    "../index.html",
+    "/linkvault/",
+    "/linkvault/index.html",
 
-    "../css/style.css",
-    "../css/dark.css",
+    "/linkvault/css/style.css",
+    "/linkvault/css/dark.css",
 
-    "../js/core.js",
-    "../js/links.js",
-    "../js/ui.js",
-    "../js/organize.js",
-    "../js/tools.js",
-    "../js/backup.js",
-    "../js/analytics.js",
-    "../js/pwa.js",
-    "../js/app.js"
+    "/linkvault/js/core.js",
+    "/linkvault/js/links.js",
+    "/linkvault/js/ui.js",
+    "/linkvault/js/organize.js",
+    "/linkvault/js/tools.js",
+    "/linkvault/js/backup.js",
+    "/linkvault/js/analytics.js",
+    "/linkvault/js/pwa.js",
+    "/linkvault/js/app.js"
 ];
 
 // INSTALL
