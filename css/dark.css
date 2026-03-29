@@ -38,10 +38,24 @@ body.darkMode .tabs button.activeTabBtn {
 
 /* CARD */
 body.darkMode .card {
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* NAVBAR */
 body.darkMode .navbar {
     border-bottom: 1px solid #333;
+}
+
+/* DARK PROFILE */
+body.dark .profileCard {
+    background: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark .profileItem {
+    background: #2a2a2a;
+}
+
+body.dark .profileMeta {
+    color: #aaa;
 }
