@@ -329,3 +329,67 @@ async function changePassword(oldPass, newPass) {
     showNotification("success", "Password changed");
     return true;
 }
+
+async function logout() {
+    let pass = prompt("Enter password to logout");
+    if (!pass) return;
+
+    let user = JSON.parse(localStorage.getItem("user"));
+
+    if (pass === user.password) {
+        localStorage.removeItem("currentUser");
+        showNotification("info", "Logged out");
+        showPage("lockScreen");
+    } else {
+        showNotification("error", "Wrong password");
+    }
+}
+// update
+async function checkForUpdates() {
+    try {
+        let res = await fetch("/app/version.json?t=" + Date.now());
+        let data = await res.json();
+
+        let currentVersion = localStorage.getItem("appVersion");
+
+        if (currentVersion === data.version) {
+            showNotification("info", "No updates available");
+        } else {
+            showNotification("success", "New update found. Updating...");
+
+            localStorage.setItem("appVersion", data.version);
+
+            // Clear cache
+            if ('caches' in window) {
+                let keys = await caches.keys();
+                for (let key of keys) {
+                    await caches.delete(key);
+                }
+            }
+
+            // Reload app
+            setTimeout(() => {
+                location.reload(true);
+            }, 1500);
+        }
+
+    } catch (e) {
+        showNotification("error", "Update check failed");
+    }
+}
+function clearAllData() {
+    let confirmDelete = confirm("Delete all data?");
+    if (!confirmDelete) return;
+
+    localStorage.clear();
+
+    if ('indexedDB' in window) {
+        indexedDB.deleteDatabase("LinkVaultDB");
+    }
+
+    showNotification("warning", "All data cleared");
+
+    setTimeout(() => {
+        location.reload();
+    }, 1000);
+}
