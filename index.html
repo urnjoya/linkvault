@@ -1,32 +1,24 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <title>LinkVault - Offline Secure Link Manager</title>
-
     <meta name="description"
         content="LinkVault is an offline secure link manager to save, organize, and manage links with password protection, tags, favorites, and reminders. Works offline as a PWA.">
-
     <meta name="keywords"
         content="link manager, bookmark manager, offline bookmark app, link vault, save links offline, pwa link manager, bookmark organizer">
-
     <meta name="author" content="urnjoya">
     <meta name="robots" content="index, follow">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-
     <!-- PWA -->
     <meta name="theme-color" content="#2d89ff">
     <link rel="manifest" href="app/manifest.json">
-
     <!-- Favicon -->
     <link rel="icon" href="assets/favicon.ico" sizes="any">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="LinkVault – Offline Secure Link Manager">
@@ -46,7 +38,6 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dark.css">
 </head>
-
 <body>
 
     <!-- LOCK SCREEN -->
@@ -209,15 +200,14 @@
         </div>
     </div>
     <div id="notificationContainer"></div>
-    <!-- SCRIPTS -->
-    <script src="js/core.js"></script>
-    <script src="js/links.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/organize.js"></script>
-    <script src="js/tools.js"></script>
-    <script src="js/backup.js"></script>
-    <script src="js/analytics.js"></script>
-    <script src="js/pwa.js"></script>
+        <div id="loaderOverlay" class="loaderOverlay hidden">
+        <div class="loaderBox">
+            <div class="loaderText" id="loaderText">Processing...</div>
+            <div class="progressBar">
+                <div class="progressFill" id="progressFill"></div>
+            </div>
+        </div>
+    </div>
     <script src="js/app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
