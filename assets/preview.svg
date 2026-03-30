@@ -1,0 +1,35 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Background (optional, remove if transparent needed) -->
+  <rect width="1200" height="630" fill="#0f172a" rx="10"/>
+
+  <!-- SAFE AREA (center 70-80%) -->
+  <!-- Logo group -->
+  <g transform="translate(600,315)">
+
+    <!-- Example Logo (you can replace this part) -->
+    
+    <!-- Circle -->
+    <circle cx="0" cy="0" r="150" fill="#1e40ff"/>
+
+    <!-- Letter / Symbol -->
+    <text x="0" y="70"
+          text-anchor="middle"
+          font-size="220"
+          font-family="Arial, sans-serif"
+          fill="white"
+          font-weight="bold" stroke="white">
+      X
+    </text>
+
+  </g>
+  <!-- App name -->
+  <text x="600" y="520"
+  text-anchor="middle"
+  text-size="80"
+  font-family="Arial, sans-serif"
+  fill="white"
+  font-weight="bold">
+  LinkVault
+</text>
+</svg>
