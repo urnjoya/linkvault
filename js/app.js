@@ -35,7 +35,7 @@ function openDB() {
     return new Promise((resolve, reject) => {
         let request = indexedDB.open("LinkVaultDB", 1);
 
-        request.onupgradeneeded = function(e) {
+        request.onupgradeneeded = function (e) {
             db = e.target.result;
 
             // LINKS TABLE
@@ -83,12 +83,12 @@ function openDB() {
             }
         };
 
-        request.onsuccess = function(e) {
+        request.onsuccess = function (e) {
             db = e.target.result;
             resolve(db);
         };
 
-        request.onerror = function() {
+        request.onerror = function () {
             reject("Database error");
         };
     });
@@ -521,7 +521,7 @@ function toggleDarkMode() {
 }
 
 // LOAD DARK MODE
-(function() {
+(function () {
     let dark = localStorage.getItem("darkMode");
     if (dark === "true") {
         document.body.classList.add("darkMode");
@@ -530,7 +530,7 @@ function toggleDarkMode() {
 // update
 async function checkForUpdates() {
     try {
-        let res = await fetch("app/version.json?t=" + Date.now());
+        let res = await fetch("/app/version.json?t=" + Date.now());
         let data = await res.json();
 
         let currentVersion = localStorage.getItem("appVersion");
@@ -628,6 +628,7 @@ if (!navigator.onLine) {
 ========================= */
 // ADD LINK FROM POPUP
 async function addLink() {
+    showLoader("Checking URL...");
     let url = document.getElementById("linkURL").value;
     let title = document.getElementById("linkTitle").value;
     let image = document.getElementById("linkImage").value;
@@ -635,27 +636,28 @@ async function addLink() {
     let tags = document.getElementById("linkTags").value;
 
     if (!url) {
-        alert("URL required");
+        showNotification("error", "URL is required");
         return;
     }
-
+    updateProgress(20);
     // Duplicate check
     let duplicate = await checkDuplicate(url);
     if (duplicate) {
         if (!confirm("Duplicate URL found. Save anyway?")) {
+            hideLoader();
             return;
         }
     }
-
-
+    updateProgress(40);
+    showLoader("Fetching metadata...");
     // Fetch metadata if missing
     let meta = await fetchMetadata(url);
-
+    updateProgress(60);
     if (!title) title = meta.title;
     if (!image) image = meta.image;
 
     // Default image
-    if (!image) image = "https://via.placeholder.com/300";
+    if (!image) image = "https://placehold.co/300x200/0330fc/ffffff?text=XXX";
 
     // Instagram detect
     let type = "normal";
@@ -680,11 +682,14 @@ async function addLink() {
         type: type,
         lastChecked: ""
     };
-
+    updateProgress(80);
+    showLoader("Saving link...");
     await dbAddLink(linkData);
-
+    updateProgress(90);
     closeAddPopup();
     loadAllCards();
+    hideLoader();
+    showNotification("success", "Link added successfully");
 }
 // DELETE LINK
 async function deleteLink(id) {
@@ -698,7 +703,7 @@ async function deleteLink(id) {
 async function editLink(id) {
     let pass = prompt("Enter password to edit");
     if (!verifyPassword(pass)) {
-        alert("Wrong password");
+        showNotification("error", "Wrong password");
         return;
     }
 
@@ -748,32 +753,48 @@ async function fetchMetadata(url) {
 async function refetchMetadata(id) {
     let pass = prompt("Enter password to refetch");
     if (!verifyPassword(pass)) {
-        alert("Wrong password");
+        showNotification("error", "Wrong password");
         return;
     }
-
+    showLoader("Rechecking URL...");
+    updateProgress(5);
     let links = await dbGetAllLinks();
+    updateProgress(15);
     let link = links.find(l => l.id === id);
-
-    if (!link) return;
-
+    if (!link) {
+        hideLoader();
+        return;
+    }
+    showLoader("Fetching metadata...");
     let meta = await fetchMetadata(link.url);
-
+    updateProgress(40);
     if (meta.title) link.title = meta.title;
     if (meta.image) link.image = meta.image;
 
     await dbUpdateLink(link);
+    updateProgress(60);
     loadAllCards();
-    showLoader("Fetching metadata...");
-
-    updateProgress(30);
+    updateProgress(75);
     await fetchData();
-
-    updateProgress(70);
+    updateProgress(90);
     saveData();
-
+    updateProgress(100);
     hideLoader();
     showNotification("success", "Metadata updated");
+}
+async function fetchData() {
+    showLoader("Syncing data...");
+
+    let links = await dbGetAllLinks();
+
+    // Save cache copy
+    localStorage.setItem("linksCache", JSON.stringify(links));
+
+    return links;
+}
+async function saveData() {
+    let links = await dbGetAllLinks();
+    localStorage.setItem("linksBackup", JSON.stringify(links));
 }
 // LOAD ALL CARDS
 async function loadAllCards() {
@@ -826,6 +847,8 @@ function createCard(link) {
 
     if (link.isDead) {
         card.style.border = "2px solid red";
+        console.warn("Dead link detected: " + link.url);
+        showNotification("error", "Dead link: " + link.title);
     }
 
     if (link.pinned) {
@@ -833,7 +856,7 @@ function createCard(link) {
     }
 
     card.innerHTML = `
-        <img src="${link.image}" onerror="this.src='https://via.placeholder.com/300'">
+        <img src="${link.image}" onerror="this.src='https://placehold.co/300x200/0f172a/ffffff?text=No+Preview'">
 
         <div class="cardTitle">${link.title}</div>
         <div class="cardURL">${link.url}</div>
@@ -1699,7 +1722,7 @@ function downloadFile(content, fileName) {
 function importDataFromFile(file) {
     let reader = new FileReader();
 
-    reader.onload = async function(e) {
+    reader.onload = async function (e) {
         try {
             let data = JSON.parse(e.target.result);
 
@@ -1737,7 +1760,7 @@ function importFromInput() {
     input.type = "file";
     input.accept = ".txt";
 
-    input.onchange = function(e) {
+    input.onchange = function (e) {
         let file = e.target.files[0];
         if (file) {
             importDataFromFile(file);
