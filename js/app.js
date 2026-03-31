@@ -530,7 +530,7 @@ function toggleDarkMode() {
 // update
 async function checkForUpdates() {
     try {
-        let res = await fetch("/linkvault/app/version.json?t=" + Date.now());
+        let res = await fetch("/app/version.json?t=" + Date.now());
         let data = await res.json();
 
         let currentVersion = localStorage.getItem("appVersion");
@@ -649,6 +649,13 @@ async function addLink() {
         }
     }
     updateProgress(40);
+    let check = await checkDeadLink({ url: url });
+    if (check === true) {
+        showNotification("error", "URL appears to be dead. Cannot add.");
+        hideLoader();
+        closeAddPopup();
+        return;
+    }
     showLoader("Fetching metadata...");
     // Fetch metadata if missing
     let meta = await fetchMetadata(url);
@@ -657,7 +664,7 @@ async function addLink() {
     if (!image) image = meta.image;
 
     // Default image
-    if (!image) image = "https://placehold.co/300x200/0330fc/ffffff?text=XXX";
+    // if (!image) image = "https://placehold.co/300x200/0330fc/ffffff?text=XXX";
 
     // Instagram detect
     let type = "normal";
@@ -727,26 +734,48 @@ async function editLink(id) {
 // FETCH METADATA (TITLE + IMAGE)
 async function fetchMetadata(url) {
     try {
-        let response = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent(url));
+        const proxyUrl = "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(url);
+        let response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error("Network response was not ok");
         let text = await response.text();
-
         let parser = new DOMParser();
         let doc = parser.parseFromString(text, "text/html");
-
-        let title = doc.querySelector("title")?.innerText;
-
-        let image = doc.querySelector("meta[property='og:image']")?.content;
-
+        // URL original URL nikalne ki koshish (for better metadata fetch)
+        const urlObj = new URL(url);
+        const domain = urlObj.hostname;
+        // Title Search (Multiple options for better accuracy)
+        let title = doc.querySelector("meta[property='og:title']")?.content || doc.querySelector("meta[name='twitter:title']")?.content || doc.querySelector("title")?.innerText || doc.querySelector("meta[name='title']")?.content || doc.querySelector("h1")?.innerText || "No Title";
+        // Image Search (Fallback)
+        let image = doc.querySelector("meta[property='og:image:secure_url']")?.content || doc.querySelector("meta[property='og:image']")?.content || doc.querySelector("meta[name='twitter:image:src']")?.content || doc.querySelector("meta[itemprop='image']")?.content || doc.querySelector("link[rel='apple-touch-icon']")?.href || doc.querySelector("link[rel='icon'][sizes='192x192']")?.href || doc.querySelector("link[rel='icon']")?.href || doc.querySelector("link[rel='shortcut icon']")?.href || doc.querySelector("img")?.src || "";
+        // fix relative iamge paths
+        if (image && !image.startsWith("http")) {
+            try {
+                // if start with //
+                if (image.startsWith('//')) {
+                    image = "https:" + image;
+                } else {
+                    // relative path ko absolute path me convert karo
+                    image = new URL(image, urlObj.origin).href;
+                }
+            }
+            catch (err) {
+                console.warn("Image URL parsing failed for: " + image, err);
+            }
+        }
         return {
-            title: title,
+            title: title.trim(),
             image: image
         };
     } catch (e) {
-        return {
-            title: "",
-            image: ""
-        };
+        console.warn("Metadata fetch failed for URL: " + url, e);
+        // errro ke case mein bhi domain name return kare
+        try {
+            return { title: new URL(url).hostname, image: "" };
+        } catch (err) {
+            return { title: 'Invalid URL', image: "" };
+        }
     }
+    console.log("FetchWala",title, image);
 }
 
 // REFRESH METADATA
@@ -912,16 +941,33 @@ async function showMoreInfo(id) {
 
     if (!link) return;
 
-    alert(
-        "Title: " + link.title +
-        "\nURL: " + link.url +
-        "\nCategory: " + link.category +
-        "\nTags: " + link.tags.join(",") +
-        "\nCreated: " + formatDate(link.createdDate) +
-        "\nLast Visit: " + formatDate(link.lastVisit) +
-        "\nReminder: " + formatDate(link.reminderDate) +
-        "\nDead Link: " + link.isDead
-    );
+    // alert(
+    //     "Title: " + link.title +
+    //     "\nURL: " + link.url +
+    //     "\nCategory: " + link.category +
+    //     "\nTags: " + link.tags.join(",") +
+    //     "\nCreated: " + formatDate(link.createdDate) +
+    //     "\nLast Visit: " + formatDate(link.lastVisit) +
+    //     "\nReminder: " + formatDate(link.reminderDate) +
+    //     "\nDead Link: " + link.isDead
+    // );
+    const modalBody = document.getElementById("modalBody");
+    modalBody.innerHTML = `
+        <div class="info-item"><strong>Title:</strong> <span>${link.title}</span></div>
+        <div class="info-item"><strong>URL:</strong> <a href="${link.url}" target="_blank">${link.url}</a></div>
+        <div class="info-item"><strong>Category:</strong> <span>${link.category}</span></div>
+        <div class="info-item"><strong>Tags:</strong> <span>${link.tags.join(", ") || "None"}</span></div>
+        <div class="info-item"><strong>Created:</strong> <span>${formatDate(link.createdDate)}</span></div>
+        <div class="info-item"><strong>Last Visit:</strong> <span>${formatDate(link.lastVisit) || "Never"}</span></div>
+        <div class="info-item"><strong>Status:</strong> <span class="${link.isDead ? 'status-dead' : 'status-alive'}">${link.isDead ? 'Dead' : 'Alive'}</span></div>
+    `;
+
+    document.getElementById("infoModal").classList.add("active");
+}
+
+function closeInfoModal() {
+    document.getElementById("infoModal").classList.remove("active");
+
 }
 
 // FORMAT DATE
@@ -1441,6 +1487,7 @@ async function countDuplicates() {
 // CHECK SINGLE LINK DEAD OR NOT
 async function checkDeadLink(link) {
     try {
+        // Note: 'no-cors' always returns status 0, making 404s hard to detect
         let response = await fetch(link.url, {
             method: "HEAD",
             mode: "no-cors"
@@ -1452,7 +1499,8 @@ async function checkDeadLink(link) {
         link.isDead = true;
     }
 
-    await dbUpdateLink(link);
+    // await dbUpdateLink(link);
+    return link.isDead;   // Now it returns true if dead, false if alive
 }
 
 // CHECK ALL LINKS DEAD STATUS
