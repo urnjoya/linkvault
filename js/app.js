@@ -671,9 +671,14 @@ async function addLink() {
     if (url.includes("instagram.com/reel")) {
         type = "instagram";
     }
-
+    if(url.includes("youtube.com") || url.includes("youtu.be/")) {
+        type = "youtube";
+    }
+    // Initial Title/Image (prioritize user input, then meta)
+    // let finalTitle = title || meta.title || "No Title";
+    // let finalImage = image || meta.image || "";
     let linkData = {
-        title: title || "No Title",
+        title: title || meta.title || "No Title",
         url: url,
         image: image,
         category: category || "General",
@@ -689,6 +694,13 @@ async function addLink() {
         type: type,
         lastChecked: ""
     };
+    // 5. SPECIAL PROCESSING (YouTube & Instagram)
+    // linkData = await processSpecialLinks(linkData);
+
+    // 6. FINAL FALLBACK FOR IMAGE
+    if (!linkData.image) {
+        linkData.image = "https://placehold.co/300x200/0330fc/ffffff?text=Fallback+Image";
+    }
     updateProgress(80);
     showLoader("Saving link...");
     await dbAddLink(linkData);
@@ -746,10 +758,15 @@ async function fetchMetadata(url) {
         // Title Search (Multiple options for better accuracy)
         let title = doc.querySelector("meta[property='og:title']")?.content || doc.querySelector("meta[name='twitter:title']")?.content || doc.querySelector("title")?.innerText || doc.querySelector("meta[name='title']")?.content || doc.querySelector("h1")?.innerText || "No Title";
         // Image Search (Fallback)
-        let image = doc.querySelector("meta[property='og:image:secure_url']")?.content || doc.querySelector("meta[property='og:image']")?.content || doc.querySelector("meta[name='twitter:image:src']")?.content || doc.querySelector("meta[itemprop='image']")?.content || doc.querySelector("link[rel='apple-touch-icon']")?.href || doc.querySelector("link[rel='icon'][sizes='192x192']")?.href || doc.querySelector("link[rel='icon']")?.href || doc.querySelector("link[rel='shortcut icon']")?.href || doc.querySelector("img")?.src || "";
+        let image = doc.querySelector("meta[property='og:image:secure_url']")?.content || doc.querySelector("meta[property='og:image']")?.content || doc.querySelector("meta[name='twitter:image:src']")?.content || doc.querySelector("meta[itemprop='image']")?.content || doc.querySelector("link[rel='apple-touch-icon']")?.href || doc.querySelector("link[rel='icon'][sizes='192x192']")?.href || doc.querySelector("link[rel='icon']")?.href || doc.querySelector("link[rel='shortcut icon']")?.href || doc.querySelector("img")?.getAttribute("src") || "";
         // fix relative iamge paths
-        if (image && !image.startsWith("http")) {
+        console.log("FetchWala", { title: title.trim(), image });
+        if (image) {
             try {
+                // Agar image full URL hai (Localhost wala), toh sirf uska path nikalein
+                if (image.startsWith("http")) {
+                    image = new URL(image).pathname;
+                }
                 // if start with //
                 if (image.startsWith('//')) {
                     image = "https:" + image;
@@ -757,10 +774,12 @@ async function fetchMetadata(url) {
                     // relative path ko absolute path me convert karo
                     image = new URL(image, urlObj.origin).href;
                 }
+                console.log("Fixed Image URL: ", image);
             }
             catch (err) {
                 console.warn("Image URL parsing failed for: " + image, err);
             }
+            console.log("Fixed Image URL: ", image);
         }
         return {
             title: title.trim(),
@@ -769,13 +788,13 @@ async function fetchMetadata(url) {
     } catch (e) {
         console.warn("Metadata fetch failed for URL: " + url, e);
         // errro ke case mein bhi domain name return kare
+        console.log("FetchWalaE", { title: title.trim(), image });
         try {
             return { title: new URL(url).hostname, image: "" };
         } catch (err) {
             return { title: 'Invalid URL', image: "" };
         }
     }
-    console.log("FetchWala",title, image);
 }
 
 // REFRESH METADATA
@@ -809,6 +828,7 @@ async function refetchMetadata(id) {
     saveData();
     updateProgress(100);
     hideLoader();
+    console.log("MetaData", link.title, link.image);
     showNotification("success", "Metadata updated");
 }
 async function fetchData() {
@@ -1882,7 +1902,7 @@ if (url) {
     window.location.href = "index.html";
 }
 /* =========================
-   18. INSTAGRAM FEATURES
+   18. INSTAGRAM / YOUTUBE FEATURES
 ========================= */
 // CHECK INSTAGRAM URL
 function isInstagramUrl(url) {
@@ -1964,6 +1984,7 @@ async function showReels() {
     let filtered = links.filter(link => link.tags.includes("reel"));
     renderCards(filtered);
 }
+
 /* =========================
    19. DRAG & DROP
 ========================= */
